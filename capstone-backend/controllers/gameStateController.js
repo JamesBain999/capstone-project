@@ -25,6 +25,18 @@ const createGameState = (data, res) => {
     });
 };
 
+// uses JSON from request body to update gamestate ID from params
+const updateGameState = (req, res) => {
+  Models.GameState.update(req.body, { where: { id: req.params.id } })
+    .then((data) => {
+      res.send({ result: 200, data: data });
+    })
+    .catch((err) => {
+      console.log(err);
+      res.send({ result: 500, error: err.message });
+    });
+};
+
 // deletes GameState matching ID from params
 const deleteGameState = (req, res) => {
   Models.GameState.destroy({ where: { id: req.params.id } })
@@ -40,5 +52,6 @@ const deleteGameState = (req, res) => {
 module.exports = {
   getGameStates,
   createGameState,
+  updateGameState,
   deleteGameState,
 };

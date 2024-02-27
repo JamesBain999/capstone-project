@@ -7,25 +7,30 @@ class GameState extends Model {}
 GameState.init(
   {
     id: {
-    type: DataTypes.INTEGER,
-    allowNull: false,
-    autoIncrement: true,
-    primaryKey: true,
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      autoIncrement: true,
+      primaryKey: true,
     },
-    userId: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
-        references: {
-            model: "users",
-            key: "id",
-        },
+    // userId: {
+    //   type: DataTypes.INTEGER,
+    //   allowNull: true,
+    //   references: {
+    //     model: "users",
+    //     key: "id",
+    //   },
+    // },
+    // playerName: {
+    //   type: DataTypes.STRING,
+    //   allowNull: true,
+    //   required: true,
+    // },
+    playerPositionX: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      required: true,
     },
-    playerName: {
-        type: DataTypes.STRING,
-        allowNull: false,
-        required: true,
-      },
-    playerPosition: {
+    playerPositionY: {
       type: DataTypes.INTEGER,
       allowNull: false,
       required: true,
