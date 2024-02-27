@@ -1,0 +1,38 @@
+.App {
+    display: grid;
+    height: 100vh;
+    place-content: center;
+    background-color: darkslategrey;
+}
+
+.game-board {
+    position: relative;
+    display: grid;
+    place-content: center;
+    border: 1px solid black;
+}
+
+.question-section {
+    position: relative;
+    display: grid;
+    place-content: center;
+    background-color: black;
+    height: 400px;
+    width: 800px;
+}
+
+#question-text {
+    color: white;
+}
+
+#answer-section {
+    color: white;
+}
+
+.tile {
+    position: absolute;
+}
+
+.player {
+    position: absolute;
+}
