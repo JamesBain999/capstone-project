@@ -16,6 +16,7 @@
     position: relative;
     display: grid;
     place-content: center;
+    text-align: center;
     background-color: black;
     height: 400px;
     width: 800px;

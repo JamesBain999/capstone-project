@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import DiceComponent from "./DiceComponent";
 import BoardComponent from "./BoardComponent";
 import movePlayer from "./MovementLogic";
 import QuestionModule from "./QuestionComponent";
+import gameStateService from "../services/GameStateService";
 
 const rows = 6;
 const columns = 10;
@@ -10,23 +11,61 @@ const tileSize = 100;
 const playerRadius = 15;
 
 export default function MainGame() {
-  const [playerPos, setPlayerPos] = useState({ x: 0, y: 0 });
+  const [currentGameState, setCurrentGameState] = useState({
+    x: 0,
+    y: 0,
+    score: 0,
+  });
+
   const [diceNumber, setDiceNumber] = useState(0);
 
-  const handleRollDice = (number) => {
-    setDiceNumber(number);
-  };
+  useEffect(() => {
+    async function createGameState() {
+      try {
+        const newGameStateData = {
+          playerPositionX: currentGameState.x,
+          playerPositionY: currentGameState.y,
+          playerCorrectAnswers: currentGameState.score,
+        };
+        await gameStateService.createGameState(newGameStateData);
+        console.log("Game state saved on initial render");
+      } catch (error) {
+        console.error("Error saving game state:", error);
+      }
+    }
+    createGameState();
+  }, []);
 
-  React.useEffect(() => {
+  useEffect(() => {
     movePlayer(
-      playerPos,
+      currentGameState,
       diceNumber,
-      setPlayerPos,
+      setCurrentGameState,
       setDiceNumber,
       columns,
       rows
     );
-  }, [diceNumber, playerPos]);
+    handleUpdateGameState();
+  }, [diceNumber]);
+
+  const handleUpdateGameState = async (id) => {
+    try {
+      const newGameStateData = {
+        playerPositionX: currentGameState.x,
+        playerPositionY: currentGameState.y,
+        playerCorrectAnswers: currentGameState.score,
+      };
+      await gameStateService.updateGameState(id, newGameStateData);
+      console.log(id)
+      console.log("Game state updated");
+    } catch (error) {
+      console.error("Error saving game state:", error);
+    }
+  };
+
+  const handleRollDice = (number) => {
+    setDiceNumber(number);
+  };
 
   return (
     <div className="App">
@@ -41,11 +80,14 @@ export default function MainGame() {
         <BoardComponent
           rows={rows}
           columns={columns}
-          playerPos={playerPos}
+          currentGameState={currentGameState}
           tileSize={tileSize}
           playerRadius={playerRadius}
         />
-        <QuestionModule />
+        <QuestionModule
+          currentGameState={currentGameState}
+          setCurrentGameState={setCurrentGameState}
+        />
       </div>
     </div>
   );

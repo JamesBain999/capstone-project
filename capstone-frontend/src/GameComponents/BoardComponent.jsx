@@ -1,7 +1,7 @@
 import React from "react";
 
 export default function BoardComponent({
-  playerPos,
+  currentGameState,
   rows,
   columns,
   tileSize,
@@ -61,7 +61,8 @@ export default function BoardComponent({
     for (let i = 0; i < rows; i++) {
       for (let j = 0; j < columns; j++) {
         const category = getCategory(j, i);
-        const isPlayerOnTile = playerPos.x === j && playerPos.y === i;
+        const isPlayerOnTile =
+          currentGameState.x === j && currentGameState.y === i;
         board.push(
           <div
             key={`${i}${j}`}
@@ -108,8 +109,8 @@ export default function BoardComponent({
           borderRadius: "50%",
           backgroundColor: "black",
           position: "absolute",
-          top: playerPos.y * tileSize + (0.5 * tileSize - playerRadius),
-          left: playerPos.x * tileSize + (0.5 * tileSize - playerRadius),
+          top: currentGameState.y * tileSize + (0.5 * tileSize - playerRadius),
+          left: currentGameState.x * tileSize + (0.5 * tileSize - playerRadius),
         }}
       ></div>
     </>
