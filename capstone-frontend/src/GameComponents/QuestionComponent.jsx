@@ -1,16 +1,20 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 
-export default function QuestionModule({
+export default function QuestionComponent({
   currentGameState,
   setCurrentGameState,
+  onAnswerQuestion,
 }) {
   const [questions, setQuestions] = useState([]);
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [showScore, setShowScore] = useState(false);
 
   useEffect(() => {
-    fetchData();
+    // Fetch data only if questions state is empty
+    if (questions.length === 0) {
+      fetchData();
+    }
   }, []);
 
   const fetchData = async () => {
@@ -31,6 +35,8 @@ export default function QuestionModule({
         ...prevGameState,
         score: prevGameState.score + 1,
       }));
+    } else {
+      alert("This answer is incorrect...");
     }
     const nextQuestion = currentQuestion + 1;
     if (nextQuestion < questions.length) {
@@ -41,6 +47,7 @@ export default function QuestionModule({
     if (currentGameState.score === 6) {
       setShowScore(true);
     }
+    onAnswerQuestion();
   };
 
   let allAnswers = [];

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import DiceComponent from "./DiceComponent";
 import BoardComponent from "./BoardComponent";
 import movePlayer from "./MovementLogic";
-import QuestionModule from "./QuestionComponent";
+import QuestionComponent from "./QuestionComponent";
 import gameStateService from "../services/GameStateService";
 
 const rows = 6;
@@ -18,6 +18,8 @@ export default function MainGame() {
   });
 
   const [diceNumber, setDiceNumber] = useState(0);
+  const [gameStateId, setGameStateId] = useState(null);
+  const [showQuestion, setShowQuestion] = useState(false);
 
   useEffect(() => {
     async function createGameState() {
@@ -27,7 +29,10 @@ export default function MainGame() {
           playerPositionY: currentGameState.y,
           playerCorrectAnswers: currentGameState.score,
         };
-        await gameStateService.createGameState(newGameStateData);
+        const createdGameState = await gameStateService.createGameState(
+          newGameStateData
+        );
+        setGameStateId(createdGameState.data.id);
         console.log("Game state saved on initial render");
       } catch (error) {
         console.error("Error saving game state:", error);
@@ -48,15 +53,20 @@ export default function MainGame() {
     handleUpdateGameState();
   }, [diceNumber]);
 
-  const handleUpdateGameState = async (id) => {
+  useEffect(() => {
+    if (gameStateId !== null) {
+      handleUpdateGameState(gameStateId);
+    }
+  }, [currentGameState]);
+
+  const handleUpdateGameState = async () => {
     try {
       const newGameStateData = {
         playerPositionX: currentGameState.x,
         playerPositionY: currentGameState.y,
         playerCorrectAnswers: currentGameState.score,
       };
-      await gameStateService.updateGameState(id, newGameStateData);
-      console.log(id)
+      await gameStateService.updateGameState(gameStateId, newGameStateData);
       console.log("Game state updated");
     } catch (error) {
       console.error("Error saving game state:", error);
@@ -65,11 +75,17 @@ export default function MainGame() {
 
   const handleRollDice = (number) => {
     setDiceNumber(number);
+    setShowQuestion(true);
   };
 
+  const handleAnswerQuestion = () => {
+    setShowQuestion(false);
+  };
   return (
     <div className="App">
-      <DiceComponent onRollDice={handleRollDice} />
+      <h1>{currentGameState.score}/6 Answers correct</h1>
+      <h1>Your last roll was a "{diceNumber}"</h1>
+      <DiceComponent onRollDice={handleRollDice} disabled={showQuestion} />
       <div
         className="game-board"
         style={{
@@ -84,10 +100,13 @@ export default function MainGame() {
           tileSize={tileSize}
           playerRadius={playerRadius}
         />
-        <QuestionModule
-          currentGameState={currentGameState}
-          setCurrentGameState={setCurrentGameState}
-        />
+        <div style={{ display: showQuestion ? "block" : "none" }}>
+          <QuestionComponent
+            currentGameState={currentGameState}
+            setCurrentGameState={setCurrentGameState}
+            onAnswerQuestion={handleAnswerQuestion}
+          />
+        </div>
       </div>
     </div>
   );

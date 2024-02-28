@@ -17,7 +17,7 @@
     display: grid;
     place-content: center;
     text-align: center;
-    background-color: black;
+    background-color: darkslategrey;
     height: 400px;
     width: 800px;
 }

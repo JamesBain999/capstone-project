@@ -27,5 +27,5 @@ export default function movePlayer(
 
   // Update player position
   setCurrentGameState({ ...currentGameState, x: newX, y: newY});
-  setDiceNumber(0); // Reset dice number after movement
+//   setDiceNumber(0); // Reset dice number after movement
 }
