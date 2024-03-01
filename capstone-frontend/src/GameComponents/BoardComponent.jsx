@@ -1,4 +1,5 @@
 import React from "react";
+import getCategory from "../services/CategoryUtility"
 
 export default function BoardComponent({
   currentGameState,
@@ -7,68 +8,15 @@ export default function BoardComponent({
   tileSize,
   playerRadius,
 }) {
-  const getCategory = (x, y) => {
-    const categories = {
-      category1: [
-        [0, 0],
-        [4, 0],
-        [8, 0],
-        [9, 3],
-        [7, 5],
-        [3, 5],
-        [0, 4],
-      ],
-      category2: [
-        [1, 0],
-        [5, 0],
-        [9, 0],
-        [9, 4],
-        [6, 5],
-        [2, 5],
-        [0, 3],
-      ],
-      category3: [
-        [2, 0],
-        [6, 0],
-        [9, 1],
-        [9, 5],
-        [5, 5],
-        [1, 5],
-        [0, 2],
-      ],
-      category4: [
-        [3, 0],
-        [7, 0],
-        [9, 2],
-        [8, 5],
-        [4, 5],
-        [0, 5],
-        [0, 1],
-      ],
-    };
-
-    for (const [cat, coords] of Object.entries(categories)) {
-      if (coords.some(([cx, cy]) => cx === x && cy === y)) {
-        return cat;
-      }
-    }
-
-    return null; // Handle the case where x and y don't match any category
-  };
-
   const renderBoard = () => {
     const board = [];
     for (let i = 0; i < rows; i++) {
       for (let j = 0; j < columns; j++) {
         const category = getCategory(j, i);
-        const isPlayerOnTile =
-          currentGameState.x === j && currentGameState.y === i;
         board.push(
           <div
             key={`${i}${j}`}
-            className={`tile ${category} ${
-              isPlayerOnTile ? "player-tile" : ""
-            }`}
+            className={`tile ${category}`}
             style={{
               width: tileSize,
               height: tileSize,
@@ -85,13 +33,13 @@ export default function BoardComponent({
 
   const getTileColor = (category) => {
     switch (category) {
-      case "category1":
+      case "history":
         return "lightblue";
-      case "category2":
+      case "science":
         return "lightgreen";
-      case "category3":
+      case "film_and_tv":
         return "lightyellow";
-      case "category4":
+      case "music":
         return "lightcoral";
       default:
         return "darkslategrey";

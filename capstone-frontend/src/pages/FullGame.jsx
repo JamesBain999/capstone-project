@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
-import DiceComponent from "./DiceComponent";
-import BoardComponent from "./BoardComponent";
-import movePlayer from "./MovementLogic";
-import QuestionComponent from "./QuestionComponent";
+import DiceComponent from "../GameComponents/DiceComponent";
+import BoardComponent from "../GameComponents/BoardComponent";
+import movePlayer from "../GameComponents/MovementLogic";
+import QuestionComponent from "../GameComponents/QuestionComponent";
 import gameStateService from "../services/GameStateService";
 
 const rows = 6;
@@ -16,11 +16,29 @@ export default function MainGame() {
     y: 0,
     score: 0,
   });
-
-  const [diceNumber, setDiceNumber] = useState(0);
+  const [diceNumber, setDiceNumber] = useState({ number: 0 });
   const [gameStateId, setGameStateId] = useState(null);
   const [showQuestion, setShowQuestion] = useState(false);
 
+  // useEffect to move player and update game state based on diceNumber
+  useEffect(() => {
+    movePlayer(
+      currentGameState,
+      diceNumber,
+      setCurrentGameState,
+      columns,
+      rows
+    );
+  }, [diceNumber]);
+
+  // useEffect to update game state when currentGameState changes
+  useEffect(() => {
+    if (gameStateId !== null) {
+      handleUpdateGameState(gameStateId);
+    }
+  }, [currentGameState]);
+
+  // useEffect to create game state on initial render
   useEffect(() => {
     async function createGameState() {
       try {
@@ -41,24 +59,7 @@ export default function MainGame() {
     createGameState();
   }, []);
 
-  useEffect(() => {
-    movePlayer(
-      currentGameState,
-      diceNumber,
-      setCurrentGameState,
-      setDiceNumber,
-      columns,
-      rows
-    );
-    handleUpdateGameState();
-  }, [diceNumber]);
-
-  useEffect(() => {
-    if (gameStateId !== null) {
-      handleUpdateGameState(gameStateId);
-    }
-  }, [currentGameState]);
-
+  // Function to update game state
   const handleUpdateGameState = async () => {
     try {
       const newGameStateData = {
@@ -73,18 +74,20 @@ export default function MainGame() {
     }
   };
 
-  const handleRollDice = (number) => {
-    setDiceNumber(number);
+  // Function to handle rolling dice
+  const handleRollDice = (diceRoll) => {
+    setDiceNumber({ number: diceRoll });
     setShowQuestion(true);
   };
 
+  // Function to handle answering question
   const handleAnswerQuestion = () => {
     setShowQuestion(false);
   };
+
   return (
     <div className="App">
       <h1>{currentGameState.score}/6 Answers correct</h1>
-      <h1>Your last roll was a "{diceNumber}"</h1>
       <DiceComponent onRollDice={handleRollDice} disabled={showQuestion} />
       <div
         className="game-board"

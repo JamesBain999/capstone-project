@@ -1,11 +1,11 @@
 import React from "react";
-import FullGame from "./GameComponents/FullGame";
 import "./App.css";
+import AppRoutes from "./routes/AppRoutes";
 
 function App() {
   return (
     <div>
-      <FullGame />
+      <AppRoutes />
     </div>
   );
 }

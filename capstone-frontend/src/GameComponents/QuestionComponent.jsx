@@ -1,35 +1,46 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
+import { fetchQuestions } from "../services/ApiUtility";
+import getCategory from "../services/CategoryUtility";
 
 export default function QuestionComponent({
   currentGameState,
   setCurrentGameState,
   onAnswerQuestion,
 }) {
-  const [questions, setQuestions] = useState([]);
-  const [currentQuestion, setCurrentQuestion] = useState(0);
-  const [showScore, setShowScore] = useState(false);
+  const [currentCategory, setCurrentCategory] = useState("science");
+  const [fullDeck, setFullDeck] = useState({
+    science: [],
+    film_and_tv: [],
+    music: [],
+    history: [],
+  });
 
   useEffect(() => {
-    // Fetch data only if questions state is empty
-    if (questions.length === 0) {
-      fetchData();
-    }
+    fetchData();
   }, []);
 
+  useEffect(() => {
+    setCurrentCategory(getCategory(currentGameState.x, currentGameState.y));
+  }, [currentGameState]);
+
   const fetchData = async () => {
-    try {
-      const response = await axios.get(
-        "https://the-trivia-api.com/v2/questions?difficulty=easy&categories=science,film_and_tv,music,history&limit=50"
-      );
-      setQuestions(response.data);
-    } catch (error) {
-      console.error("Error fetching data:", error);
-    }
+    const scienceQuestions = await fetchQuestions("science");
+    const film_and_tvQuestions = await fetchQuestions("film_and_tv");
+    const musicQuestions = await fetchQuestions("music");
+    const historyQuestions = await fetchQuestions("history");
+
+    const allQuestions = {
+      science: [...scienceQuestions],
+      film_and_tv: [...film_and_tvQuestions],
+      music: [...musicQuestions],
+      history: [...historyQuestions],
+    };
+
+    setFullDeck(allQuestions);
   };
 
-  const handleAnswerButtonClick = (correctAnswer) => {
-    if (correctAnswer === questions[currentQuestion].correctAnswer) {
+  const handleAnswerButtonClick = (selectedAnswer) => {
+    if (selectedAnswer === fullDeck[currentCategory][0].correctAnswer) {
       alert("This answer is correct!");
       setCurrentGameState((prevGameState) => ({
         ...prevGameState,
@@ -38,53 +49,41 @@ export default function QuestionComponent({
     } else {
       alert("This answer is incorrect...");
     }
-    const nextQuestion = currentQuestion + 1;
-    if (nextQuestion < questions.length) {
-      setCurrentQuestion(nextQuestion);
-    } else {
-      setShowScore(true);
-    }
-    if (currentGameState.score === 6) {
-      setShowScore(true);
-    }
+    setFullDeck((prevDeck) => {
+      const updatedDeck = { ...prevDeck };
+      updatedDeck[currentCategory].shift();
+      return updatedDeck;
+    });
     onAnswerQuestion();
   };
 
-  let allAnswers = [];
-  questions.map((answers) => {
-    allAnswers.push(
-      [answers.correctAnswer, ...answers.incorrectAnswers].sort((a, b) =>
-        a < b ? -1 : 1
-      )
-    );
-  });
-
   return (
     <>
-      {showScore ? (
-        <div className="score-section">
-          You scored {currentGameState.score} out of {questions.length}
-        </div>
-      ) : (
-        <div className="question-section">
-          {questions.length > 0 && (
-            <>
-              <h1 id="question-text">
-                {currentQuestion + 1}.{" "}
-                {questions[currentQuestion].question.text}
-              </h1>
-              <div id="answer-section">
-                {allAnswers[currentQuestion].map((answeroption) => (
-                  <button onClick={() => handleAnswerButtonClick(answeroption)}>
-                    {answeroption}
+      <div className="question-section">
+        {fullDeck[currentCategory]?.length > 0 && (
+          <>
+            <h1 id="question-text">
+              {fullDeck[currentCategory][0].question.text}
+            </h1>
+            <div id="answer-section">
+              {[
+                fullDeck[currentCategory][0].correctAnswer,
+                ...fullDeck[currentCategory][0].incorrectAnswers,
+              ]
+                .sort()
+                .map((answerOption, index) => (
+                  <button
+                    key={index}
+                    onClick={() => handleAnswerButtonClick(answerOption)}
+                  >
+                    {answerOption}
                   </button>
                 ))}
-                <h1>{currentGameState.score} out of 6</h1>
-              </div>
-            </>
-          )}
-        </div>
-      )}
+              <h1>{currentGameState.score} out of 6</h1>
+            </div>
+          </>
+        )}
+      </div>
     </>
   );
 }
