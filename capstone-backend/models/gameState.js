@@ -27,17 +27,17 @@ GameState.init(
     // },
     playerPositionX: {
       type: DataTypes.INTEGER,
-      allowNull: false,
+      allowNull: true,
       required: true,
     },
     playerPositionY: {
       type: DataTypes.INTEGER,
-      allowNull: false,
+      allowNull: true,
       required: true,
     },
     playerCorrectAnswers: {
       type: DataTypes.INTEGER,
-      allowNull: false,
+      allowNull: true,
       required: true,
     },
   },
@@ -48,4 +48,5 @@ GameState.init(
     freezeTableName: true,
   }
 );
+
 module.exports = GameState;
