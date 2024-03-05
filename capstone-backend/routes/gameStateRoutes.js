@@ -21,5 +21,9 @@ router.put("/:id", (req, res) => {
 router.delete("/:id", (req, res) => {
   Controllers.gameStateController.deleteGameState(req, res);
 });
+// matches checkEmailExists requests to /api/users/123 (123 in id param)
+router.post("/getGameStatesbyUserId", (req, res) => {
+  Controllers.gameStateController.getGameStatesbyUserId(req, res);
+});
 
 module.exports = router;

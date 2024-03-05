@@ -12,19 +12,14 @@ GameState.init(
       autoIncrement: true,
       primaryKey: true,
     },
-    // userId: {
-    //   type: DataTypes.INTEGER,
-    //   allowNull: true,
-    //   references: {
-    //     model: "users",
-    //     key: "id",
-    //   },
-    // },
-    // playerName: {
-    //   type: DataTypes.STRING,
-    //   allowNull: true,
-    //   required: true,
-    // },
+    userId: {
+      type: DataTypes.INTEGER,
+      allowNull: true,
+      references: {
+        model: "users",
+        key: "id",
+      },
+    },
     playerPositionX: {
       type: DataTypes.INTEGER,
       allowNull: true,

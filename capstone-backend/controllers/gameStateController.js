@@ -49,9 +49,22 @@ const deleteGameState = (req, res) => {
     });
 };
 
+const getGameStatesbyUserId = (req, res) => {
+  const { userId } = req.body;
+  Models.GameState.findAll({ where: { userId: userId } })
+    .then((data) => {
+      res.send({ result: 200, data: data });
+    })
+    .catch((err) => {
+      console.log(err);
+      res.send({ result: 500, error: err.message });
+    });
+};
+
 module.exports = {
   getGameStates,
   createGameState,
   updateGameState,
   deleteGameState,
+  getGameStatesbyUserId
 };
