@@ -1,46 +1,23 @@
 import React, { useEffect, useState } from "react";
 import { fetchQuestions } from "../services/ApiUtility";
-import getCategory from "../services/CategoryUtility";
+import { useGameState } from "./GameStateContext";
 
-export default function QuestionComponent({
-  currentGameState,
-  setCurrentGameState,
-  onAnswerQuestion,
-}) {
-  const [currentCategory, setCurrentCategory] = useState("science");
-  const [fullDeck, setFullDeck] = useState({
-    science: [],
-    film_and_tv: [],
-    music: [],
-    history: [],
-  });
+export default function QuestionComponent({onAnswerQuestion,currentCategory}) {
+  const { setCurrentGameState } = useGameState();
+  const [currentQuestion, setCurrentQuestion] = useState(null
+);
 
   useEffect(() => {
     fetchData();
   }, []);
 
-  useEffect(() => {
-    setCurrentCategory(getCategory(currentGameState.x, currentGameState.y));
-  }, [currentGameState]);
-
   const fetchData = async () => {
-    const scienceQuestions = await fetchQuestions("science");
-    const film_and_tvQuestions = await fetchQuestions("film_and_tv");
-    const musicQuestions = await fetchQuestions("music");
-    const historyQuestions = await fetchQuestions("history");
-
-    const allQuestions = {
-      science: [...scienceQuestions],
-      film_and_tv: [...film_and_tvQuestions],
-      music: [...musicQuestions],
-      history: [...historyQuestions],
-    };
-
-    setFullDeck(allQuestions);
+    const fetchedQuestion = await fetchQuestions(`${currentCategory}`);
+    setCurrentQuestion(fetchedQuestion[0]);
   };
 
   const handleAnswerButtonClick = (selectedAnswer) => {
-    if (selectedAnswer === fullDeck[currentCategory][0].correctAnswer) {
+    if (selectedAnswer === currentQuestion.correctAnswer) {
       alert("This answer is correct!");
       setCurrentGameState((prevGameState) => ({
         ...prevGameState,
@@ -49,26 +26,22 @@ export default function QuestionComponent({
     } else {
       alert("This answer is incorrect...");
     }
-    setFullDeck((prevDeck) => {
-      const updatedDeck = { ...prevDeck };
-      updatedDeck[currentCategory].shift();
-      return updatedDeck;
-    });
     onAnswerQuestion();
   };
 
   return (
     <>
       <div className="question-section">
-        {fullDeck[currentCategory]?.length > 0 && (
+        {currentQuestion && (
           <>
+            <h1>Category is: {currentCategory.toUpperCase()}</h1>
             <h1 id="question-text">
-              {fullDeck[currentCategory][0].question.text}
+              {currentQuestion.question.text}
             </h1>
             <div id="answer-section">
               {[
-                fullDeck[currentCategory][0].correctAnswer,
-                ...fullDeck[currentCategory][0].incorrectAnswers,
+                currentQuestion.correctAnswer,
+                ...currentQuestion.incorrectAnswers,
               ]
                 .sort()
                 .map((answerOption, index) => (
@@ -79,7 +52,6 @@ export default function QuestionComponent({
                     {answerOption}
                   </button>
                 ))}
-              <h1>{currentGameState.score} out of 6</h1>
             </div>
           </>
         )}

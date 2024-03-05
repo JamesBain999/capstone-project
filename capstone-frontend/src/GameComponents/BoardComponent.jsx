@@ -1,13 +1,9 @@
 import React from "react";
 import getCategory from "../services/CategoryUtility"
+import { useGameState } from "./GameStateContext";
 
-export default function BoardComponent({
-  currentGameState,
-  rows,
-  columns,
-  tileSize,
-  playerRadius,
-}) {
+export default function BoardComponent({rows,columns,tileSize,playerRadius}) {
+  const {currentGameState, setCurrentGameState} = useGameState();
   const renderBoard = () => {
     const board = [];
     for (let i = 0; i < rows; i++) {

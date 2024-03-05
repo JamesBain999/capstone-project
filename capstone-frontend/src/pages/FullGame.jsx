@@ -3,7 +3,9 @@ import DiceComponent from "../GameComponents/DiceComponent";
 import BoardComponent from "../GameComponents/BoardComponent";
 import movePlayer from "../GameComponents/MovementLogic";
 import QuestionComponent from "../GameComponents/QuestionComponent";
+import { useGameState } from "../GameComponents/GameStateContext";
 import gameStateService from "../services/GameStateService";
+import getCategory from "../services/CategoryUtility";
 
 const rows = 6;
 const columns = 10;
@@ -11,55 +13,57 @@ const tileSize = 100;
 const playerRadius = 15;
 
 export default function MainGame() {
-  const [currentGameState, setCurrentGameState] = useState({
-    x: 0,
-    y: 0,
-    score: 0,
-  });
+  const { currentGameState, setCurrentGameState } = useGameState();
   const [diceNumber, setDiceNumber] = useState({ number: 0 });
   const [gameStateId, setGameStateId] = useState(null);
   const [showQuestion, setShowQuestion] = useState(false);
+  const [currentCategory, setCurrentCategory] = useState("history");
 
-  // useEffect to move player and update game state based on diceNumber
+  useEffect(() => {
+    setCurrentCategory(getCategory(currentGameState.x, currentGameState.y));
+    setShowQuestion(true);
+  }, [currentGameState.x, currentGameState.y]);
+
   useEffect(() => {
     movePlayer(
-      currentGameState,
       diceNumber,
-      setCurrentGameState,
       columns,
-      rows
+      rows,
+      currentGameState,
+      setCurrentGameState
     );
   }, [diceNumber]);
 
-  // useEffect to update game state when currentGameState changes
   useEffect(() => {
-    if (gameStateId !== null) {
+    if (gameStateId) {
       handleUpdateGameState(gameStateId);
     }
   }, [currentGameState]);
 
-  // useEffect to create game state on initial render
   useEffect(() => {
-    async function createGameState() {
-      try {
-        const newGameStateData = {
-          playerPositionX: currentGameState.x,
-          playerPositionY: currentGameState.y,
-          playerCorrectAnswers: currentGameState.score,
-        };
-        const createdGameState = await gameStateService.createGameState(
-          newGameStateData
-        );
-        setGameStateId(createdGameState.data.id);
-        console.log("Game state saved on initial render");
-      } catch (error) {
-        console.error("Error saving game state:", error);
+    setShowQuestion(false)
+    setGameStateId(currentGameState.id);
+    if (currentGameState.id === null) {
+      async function createGameState() {
+        try {
+          const newGameStateData = {
+            playerPositionX: currentGameState.x,
+            playerPositionY: currentGameState.y,
+            playerCorrectAnswers: currentGameState.score,
+          };
+          const createdGameState = await gameStateService.createGameState(
+            newGameStateData
+          );
+          setGameStateId(createdGameState.data.id);
+          console.log("Game state saved on initial render");
+        } catch (error) {
+          console.error("Error saving game state:", error);
+        }
       }
+      createGameState();
     }
-    createGameState();
   }, []);
 
-  // Function to update game state
   const handleUpdateGameState = async () => {
     try {
       const newGameStateData = {
@@ -74,13 +78,10 @@ export default function MainGame() {
     }
   };
 
-  // Function to handle rolling dice
   const handleRollDice = (diceRoll) => {
     setDiceNumber({ number: diceRoll });
-    setShowQuestion(true);
   };
 
-  // Function to handle answering question
   const handleAnswerQuestion = () => {
     setShowQuestion(false);
   };
@@ -99,16 +100,16 @@ export default function MainGame() {
         <BoardComponent
           rows={rows}
           columns={columns}
-          currentGameState={currentGameState}
           tileSize={tileSize}
           playerRadius={playerRadius}
         />
-        <div style={{ display: showQuestion ? "block" : "none" }}>
-          <QuestionComponent
-            currentGameState={currentGameState}
-            setCurrentGameState={setCurrentGameState}
-            onAnswerQuestion={handleAnswerQuestion}
-          />
+        <div>
+          {showQuestion && (
+            <QuestionComponent
+              onAnswerQuestion={handleAnswerQuestion}
+              currentCategory={currentCategory}
+            />
+          )}
         </div>
       </div>
     </div>

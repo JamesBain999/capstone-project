@@ -1,10 +1,4 @@
-export default function movePlayer(
-  currentGameState,
-  diceNumber,
-  setCurrentGameState,
-  columns,
-  rows
-) {
+export default function movePlayer(diceNumber,columns,rows, currentGameState, setCurrentGameState){
 
   if (diceNumber.number === 0) return currentGameState; // No movement if dice not rolled yet
 
