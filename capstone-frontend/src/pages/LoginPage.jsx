@@ -1,7 +1,10 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import UserService from "../services/UserService";
+import { useUserEmailContext } from "../contexts/UserEmailContext";
+
 function LoginPage() {
+  const { setUserEmail } = useUserEmailContext();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
@@ -9,9 +12,11 @@ function LoginPage() {
   const handleLogin = async (e) => {
     e.preventDefault();
 
-    try{
+    try {
       const loggedInUser = await UserService.loginUser({ email, password });
       console.log("User logged in successfully:", loggedInUser);
+      setUserEmail(email);
+
       navigate("/GameOptions");
     } catch (error) {
       console.error("Error logging in:", error);

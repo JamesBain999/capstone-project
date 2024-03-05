@@ -55,7 +55,14 @@ const UserService = {
       throw error;
     }
   },
-  
+  getIdByEmail: async (email) => {
+    try {
+      const response = await axios.post(`${BASE_URL}/api/Users/getIdbyEmail`, { email });
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
+  },
 };
 
 export default UserService;

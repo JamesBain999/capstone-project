@@ -39,6 +39,15 @@ const gameStateService = {
       throw error;
     }
   },
+  getGameStatesbyUserId: async (userId) => {
+    try {
+      const response = await axios.post(`${BASE_URL}/api/gameStates/getGameStatesbyUserId`, { userId });
+      return response.data;
+    } catch (error) {
+      console.error("Error fetching game states:", error);
+      throw error;
+    }
+  },
 };
 
 export default gameStateService;

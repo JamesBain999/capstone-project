@@ -4,6 +4,7 @@ import BoardComponent from "../GameComponents/BoardComponent";
 import movePlayer from "../GameComponents/MovementLogic";
 import QuestionComponent from "../GameComponents/QuestionComponent";
 import { useGameState } from "../GameComponents/GameStateContext";
+import { useUserIdContext } from "../contexts/CurrentUserIdContext";
 import gameStateService from "../services/GameStateService";
 import getCategory from "../services/CategoryUtility";
 
@@ -13,6 +14,7 @@ const tileSize = 100;
 const playerRadius = 15;
 
 export default function MainGame() {
+  const { currentUserId } = useUserIdContext();
   const { currentGameState, setCurrentGameState } = useGameState();
   const [diceNumber, setDiceNumber] = useState({ number: 0 });
   const [gameStateId, setGameStateId] = useState(null);
@@ -47,6 +49,7 @@ export default function MainGame() {
       async function createGameState() {
         try {
           const newGameStateData = {
+            userId: currentUserId,
             playerPositionX: currentGameState.x,
             playerPositionY: currentGameState.y,
             playerCorrectAnswers: currentGameState.score,
@@ -67,6 +70,7 @@ export default function MainGame() {
   const handleUpdateGameState = async () => {
     try {
       const newGameStateData = {
+        userId: currentUserId,
         playerPositionX: currentGameState.x,
         playerPositionY: currentGameState.y,
         playerCorrectAnswers: currentGameState.score,

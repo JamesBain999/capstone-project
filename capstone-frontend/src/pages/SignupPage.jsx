@@ -1,8 +1,10 @@
 import React, { useState } from "react";
 import UserService from "../services/UserService";
 import { useNavigate } from "react-router-dom";
+import { useUserEmailContext } from "../contexts/UserEmailContext";
 
 function SignupPage() {
+  const { setUserEmail } = useUserEmailContext();
   const [name, setname] = useState("");
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
@@ -11,7 +13,7 @@ function SignupPage() {
 
   const handleSignup = async (e) => {
     e.preventDefault();
-  
+
     try {
       const emailExistsResponse = await UserService.checkEmailExists(email);
       if (emailExistsResponse.result === 409) {
@@ -20,12 +22,12 @@ function SignupPage() {
       }
       const newUser = await UserService.createUser({ name, password, email });
       console.log("User signed up successfully:", newUser);
+      setUserEmail(email);
       navigate("/GameOptions");
     } catch (error) {
       console.error("Error signing up:", error);
     }
   };
-  
 
   return (
     <div>
