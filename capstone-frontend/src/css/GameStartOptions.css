@@ -1,0 +1,53 @@
+.game-start-options-container {
+    background-color: darkslategrey;
+    color: white;
+    padding: 20px;
+    border-radius: 10px;
+    display: grid;
+    place-content: center;
+    text-align: center;
+    height: 100vh;
+    width: 100vw;
+  }
+  
+  .game-start-options-container h1 {
+    text-align: center;
+  }
+  
+  .game-start-options-container h2 {
+    margin-top: 20px;
+  }
+  
+  .game-start-options-container ul {
+    list-style-type: none;
+    padding: 0;
+  }
+  
+  .game-start-options-container li {
+    margin-top: 10px;
+  }
+  
+  .game-start-options-container button {
+    background-color: lightblue;
+    color: darkslategrey;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 10px;
+  }
+  
+  .game-start-options-container button:hover {
+    background-color: skyblue;
+  }
+  
+  .game-start-options-container select {
+    margin-top: 10px;
+    padding: 5px;
+  }
+  
+  .game-start-options-container label {
+    display: block;
+    margin-top: 10px;
+  }
+  

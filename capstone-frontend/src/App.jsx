@@ -1,7 +1,6 @@
 import React from "react";
-import "./App.css";
 import AppRoutes from "./routes/AppRoutes";
-import { GameStateProvider } from "./GameComponents/GameStateContext";
+import { GameStateProvider } from "./contexts/GameStateContext";
 import { UserEmailProvider } from "./contexts/UserEmailContext";
 import { UserIdProvider } from "./contexts/CurrentUserIdContext";
 

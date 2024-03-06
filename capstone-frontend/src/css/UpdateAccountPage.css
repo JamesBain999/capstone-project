@@ -1,0 +1,48 @@
+.update-account-container {
+    background-color: darkslategrey;
+    color: white;
+    display: grid;
+    place-content: center;
+    text-align: center;
+    height: 100vh;
+    width: 100vw;
+  }
+  
+  .form-group {
+    margin-bottom: 20px;
+  }
+  
+  .form-group input {
+    width: 100%;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+  }
+
+  .buttons {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .update-button,
+  .return-button,
+  .delete-button {
+    background-color: lightblue;
+    color: darkslategrey;
+    border: none;
+    margin: 10px;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .update-button:hover,
+  .delete-button:hover {
+    background-color: skyblue;
+  }
+
+  .return-button {
+    background-color: rgb(255, 255, 255);
+  }
+  

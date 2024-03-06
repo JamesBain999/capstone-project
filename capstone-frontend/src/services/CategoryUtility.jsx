@@ -1,4 +1,11 @@
+/**
+ * Function to determine the category based on the given coordinates (x, y) on the game board.
+ * @param {number} x - The x-coordinate on the game board.
+ * @param {number} y - The y-coordinate on the game board.
+ * @returns {string|null} The category of the tile at the given coordinates, or null if no category is found.
+ */
 export default function getCategory(x, y) {
+  // Object mapping categories to their respective coordinates on the game board
   const categories = {
     history: [
       [0, 0],
@@ -38,11 +45,12 @@ export default function getCategory(x, y) {
     ],
   };
 
+  // Loop through categories and check if given coordinates match any category coordinates
   for (const [tileCategory, coords] of Object.entries(categories)) {
     if (coords.some(([cx, cy]) => cx === x && cy === y)) {
-      return tileCategory;
+      return tileCategory; // Return category if coordinates match
     }
   }
 
-  return null;
+  return null; // Return null if no category matches the given coordinates
 }
