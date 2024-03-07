@@ -35,6 +35,11 @@ GameState.init(
       allowNull: true,
       required: true,
     },
+    gameDifficultySetting: {
+      type: DataTypes.STRING,
+      allowNull: true,
+      required: true,
+    }
   },
   {
     sequelize: sequelizeInstance,

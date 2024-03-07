@@ -51,7 +51,6 @@ export default function BoardComponent({
     }
   };
 
-  // Rendering the board and player
   return (
     <>
       {/* Rendering the board */}

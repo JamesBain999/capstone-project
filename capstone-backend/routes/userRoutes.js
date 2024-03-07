@@ -37,4 +37,9 @@ router.post("/getIdbyEmail", (req, res) => {
   Controllers.userController.getIdByEmail(req, res);
 });
 
+// matches checkEmailExists requests to /api/users/123 (123 in id param)
+router.post("/getUserById/:id", (req, res) => {
+  Controllers.userController.getUserById(req, res);
+});
+
 module.exports = router;

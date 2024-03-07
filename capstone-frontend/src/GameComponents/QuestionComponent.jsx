@@ -51,7 +51,7 @@ export default function QuestionComponent({ onAnswerQuestion, currentCategory })
         {currentQuestion && (
           <>
             {/* Displaying the category and question */}
-            <h1>Category is: {currentCategory.toUpperCase()}</h1>
+            <h1 id="category-text">You landed on {currentCategory.toUpperCase()}</h1>
             <h1 id="question-text">{currentQuestion.question.text}</h1>
             {/* Rendering the answer options as buttons */}
             <div id="answer-section">

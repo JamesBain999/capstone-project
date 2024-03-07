@@ -55,12 +55,12 @@ const login = (req, res) => {
     .then((user) => {
       if (user) {
         if (user.password === password) {
-          res.send({ result: 200, message: 'Login successful', user: user });
+          res.send({ result: 200, message: "Login successful", user: user });
         } else {
-          res.send({ result: 401, error: 'Incorrect password' });
+          res.send({ result: 401, error: "Incorrect password" });
         }
       } else {
-        res.send({ result: 404, error: 'User not found' });
+        res.send({ result: 404, error: "User not found" });
       }
     })
     .catch((err) => {
@@ -74,9 +74,9 @@ const checkEmailExists = (req, res) => {
   Models.User.findOne({ where: { email: email } })
     .then((user) => {
       if (user) {
-        res.send({ result: 409, message: 'Email already exists', user: user });
+        res.send({ result: 409, message: "Email already exists", user: user });
       } else {
-        res.send({ result: 404, error: 'Email not found' });
+        res.send({ result: 404, error: "Email not found" });
       }
     })
     .catch((err) => {
@@ -92,7 +92,23 @@ const getIdByEmail = (req, res) => {
       if (user) {
         res.send({ result: 200, userId: user.id });
       } else {
-        res.send({ result: 404, error: 'User not found' });
+        res.send({ result: 404, error: "User not found" });
+      }
+    })
+    .catch((err) => {
+      console.log(err);
+      res.send({ result: 500, error: err.message });
+    });
+};
+
+const getUserById = (req, res) => {
+  const userId = req.params.id;
+  Models.User.findByPk(userId)
+    .then((user) => {
+      if (user) {
+        res.send({ result: 200, data: user });
+      } else {
+        res.send({ result: 404, error: "User not found" });
       }
     })
     .catch((err) => {
@@ -108,5 +124,6 @@ module.exports = {
   deleteUser,
   login,
   checkEmailExists,
-  getIdByEmail
+  getIdByEmail,
+  getUserById,
 };
