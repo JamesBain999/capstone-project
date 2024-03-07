@@ -1,4 +1,6 @@
 import React from "react";
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 // DiceComponent function component
 export default function DiceComponent({ onRollDice, disabled }) {
@@ -9,7 +11,7 @@ export default function DiceComponent({ onRollDice, disabled }) {
     // Calling the callback function passed as prop with the rolled number
     onRollDice(number);
     // Alerting the user about the rolled number
-    alert(`You just rolled a ${number}`);
+    toast.info(`You just rolled a ${number}`);
   };
 
   // Rendering the button for rolling the dice

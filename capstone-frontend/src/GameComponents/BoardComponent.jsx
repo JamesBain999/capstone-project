@@ -51,7 +51,7 @@ export default function BoardComponent({
     }
   };
 
-  return (
+  return ( 
     <>
       {/* Rendering the board */}
       {renderBoard()}

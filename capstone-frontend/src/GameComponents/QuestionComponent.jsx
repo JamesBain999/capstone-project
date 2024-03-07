@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { fetchQuestions } from "../services/ApiUtility"; // Importing utility function for fetching questions
 import { useGameState } from "../contexts/GameStateContext"; // Importing custom hook for accessing game state context
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 export default function QuestionComponent({ onAnswerQuestion, currentCategory }) {
   const { currentGameState, setCurrentGameState } = useGameState(); // Using custom hook to get current game state
@@ -29,7 +31,7 @@ export default function QuestionComponent({ onAnswerQuestion, currentCategory })
     // Checking if the selected answer is correct
     if (selectedAnswer === currentQuestion.correctAnswer) {
       // Alerting the user that the answer is correct
-      alert("This answer is correct!");
+      toast.success("This answer is correct!");
       // Updating the game state to increment the score
       setCurrentGameState((prevGameState) => ({
         ...prevGameState,
@@ -37,7 +39,7 @@ export default function QuestionComponent({ onAnswerQuestion, currentCategory })
       }));
     } else {
       // Alerting the user that the answer is incorrect
-      alert(`This answer is incorrect. The correct answer was: ${currentQuestion.correctAnswer}`);
+      toast.error(`This answer is incorrect. The correct answer was: ${currentQuestion.correctAnswer}`);
     }
     // Calling the callback function to proceed to the next question
     onAnswerQuestion();
