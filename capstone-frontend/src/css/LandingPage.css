@@ -1,42 +1,22 @@
-.landing-page-container {
-    background-color: darkslategrey;
-    color: white;
-    padding: 20px;
-    border-radius: 10px;
-    display: grid;
-    place-content: center;
-    text-align: center;
-    height: 100vh;
-    width: 100vw;
-  }
-  
-  .landing-page-heading {
-    font-size: 90px;
-    margin-bottom: 20px;
-  }
-  
-  .landing-page-text {
-    font-size: 40px;
-    margin-bottom: 30px;
-  }
-  
-  .landing-page-links {
-    display: flex;
-    justify-content: center;
-    font-size: 30px;
-  }
-  
-  .landing-page-link {
-    background-color: skyblue;
-    color: white;
-    padding: 10px 20px;
-    border-radius: 5px;
-    text-decoration: none;
-    margin: 0 10px;
-    transition: background-color 0.3s ease;
-  }
-  
-  .landing-page-link:hover {
-    background-color: skyblue;
-  }
-  
+.container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+
+.landing-page-heading {
+  color: white;
+  font-size: 120px;
+  margin-bottom: 20px;
+}
+
+.landing-page-text {
+  color: white;
+  margin-bottom: 40px;
+}
+
+.landing-page-button{
+  width: 200px
+}

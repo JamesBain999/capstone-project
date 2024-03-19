@@ -3,11 +3,13 @@ import { useUserIdContext } from "../contexts/CurrentUserIdContext"; // Importin
 import UserService from "../services/UserService"; // Importing UserService for handling user-related operations
 import { Link } from "react-router-dom"; // Importing Link component from react-router-dom for navigation
 import { useNavigate } from "react-router-dom"; // Importing useNavigate hook from react-router-dom for navigation
+import { useUserEmailContext } from "../contexts/UserEmailContext";
 import "../css/UpdateAccountPage.css";
 
 // Functional component for updating user account information
 const UpdateAccountPage = () => {
   const { currentUserId } = useUserIdContext(); // Using custom hook to get current user ID
+  const { setUserEmail } = useUserEmailContext(); // Using custom hook to use setUserEmail
   const navigate = useNavigate(); // Initializing useNavigate hook for navigation
   const [name, setName] = useState(""); // State to manage user's name
   const [email, setEmail] = useState(""); // State to manage user's email
@@ -39,6 +41,7 @@ const UpdateAccountPage = () => {
     try {
       setLoading(true);
       await UserService.updateUser(currentUserId, { name, email });
+      setUserEmail(email);
       setSuccess(true);
       setLoading(false);
     } catch (error) {

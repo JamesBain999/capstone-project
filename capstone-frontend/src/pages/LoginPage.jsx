@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import UserService from "../services/UserService";
 import { useUserEmailContext } from "../contexts/UserEmailContext";
-import "../css/LoginPage.css"
+import "bootstrap/dist/css/bootstrap.min.css"; // Import Bootstrap CSS
 
 // LoginPage component represents the login page of the application
 const LoginPage = () => {
@@ -38,41 +38,50 @@ const LoginPage = () => {
   };
 
   return (
-    <div className="login-page-container">
-      <h2 className="login-page-heading">Login</h2>
-      {/* Form for user login */}
-      <form onSubmit={handleLogin}>
-        <div className="form-group">
-          <label htmlFor="email">Email:</label>
-          {/* Input field for entering email */}
-          <input
-            type="text"
-            id="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required // Email input is required
-            className="login-input"
-          />
+    <div className="container mt-5">
+      <div className="row justify-content-center">
+        <div className="card p-4">
+          <h1 className="mb-4 text-decoration-underline">Login</h1>
+          <form onSubmit={handleLogin}>
+            <div className="form-group">
+              <label htmlFor="email">Email:</label>
+              <input
+                type="email"
+                id="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required // Email input is required
+                className="form-control form-control-lg" // Bootstrap class
+              />
+            </div>
+            <div className="form-group">
+              <label htmlFor="password">Password:</label>
+              <input
+                type="password"
+                id="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required // Password input is required
+                className="form-control form-control-lg" // Bootstrap class
+              />
+            </div>
+            {/* Button for submitting login form */}
+            <div className="row justify-content-center">
+              <button
+                type="submit"
+                className="btn btn-primary btn-lg btn-block mt-4"
+              >
+                Login
+              </button>{" "}
+              {/* Bootstrap button class */}
+            </div>
+          </form>
+          {/* Displaying error message if login fails */}
+          {error && <p className="text-danger mt-3">{error}</p>}
         </div>
-        <div className="form-group">
-          <label htmlFor="password">Password:</label>
-          {/* Input field for entering password */}
-          <input
-            type="password"
-            id="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required // Password input is required
-            className="login-input"
-          />
-        </div>
-        {/* Button for submitting login form */}
-        <button type="submit" className="login-button">Login</button>
-      </form>
-      {/* Displaying error message if login fails */}
-      {error && <p style={{ color: "red" }}>{error}</p>}
+      </div>
     </div>
   );
-}
+};
 
 export default LoginPage;
