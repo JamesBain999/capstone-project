@@ -1,10 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { fetchQuestions } from "../services/ApiUtility"; // Importing utility function for fetching questions
 import { useGameState } from "../contexts/GameStateContext"; // Importing custom hook for accessing game state context
-import { toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
-export default function QuestionComponent({ onAnswerQuestion, currentCategory }) {
+export default function QuestionComponent({
+  onAnswerQuestion,
+  currentCategory,
+}) {
   const { currentGameState, setCurrentGameState } = useGameState(); // Using custom hook to get current game state
   const [currentQuestion, setCurrentQuestion] = useState(null); // State for storing the current question
 
@@ -22,7 +25,9 @@ export default function QuestionComponent({ onAnswerQuestion, currentCategory })
     );
     // Setting the current question to the first fetched question
     setCurrentQuestion(fetchedQuestion[0]);
-    console.log(`Difficulty of current question: ${currentGameState.gameDifficulty}`);
+    console.log(
+      `Difficulty of current question: ${currentGameState.gameDifficulty}`
+    );
     console.log(`Question data fetched from API: ${fetchedQuestion[0]}`);
   };
 
@@ -39,7 +44,9 @@ export default function QuestionComponent({ onAnswerQuestion, currentCategory })
       }));
     } else {
       // Alerting the user that the answer is incorrect
-      toast.error(`This answer is incorrect. The correct answer was: ${currentQuestion.correctAnswer}`);
+      toast.error(
+        `This answer is incorrect. The correct answer was: ${currentQuestion.correctAnswer}`
+      );
     }
     // Calling the callback function to proceed to the next question
     onAnswerQuestion();
@@ -53,7 +60,12 @@ export default function QuestionComponent({ onAnswerQuestion, currentCategory })
         {currentQuestion && (
           <>
             {/* Displaying the category and question */}
-            <h1 id="category-text">You landed on {currentCategory.toUpperCase()}</h1>
+            <h1 id="category-text">
+              You landed on{" "}
+              <span style={{ fontWeight: "1000" }}>
+                {currentCategory.toUpperCase()}
+              </span>
+            </h1>
             <h1 id="question-text">{currentQuestion.question.text}</h1>
             {/* Rendering the answer options as buttons */}
             <div id="answer-section">
@@ -63,7 +75,8 @@ export default function QuestionComponent({ onAnswerQuestion, currentCategory })
               ]
                 .sort() // Sorting answer options
                 .map((answerOption, index) => (
-                  <button className="question-button"
+                  <button
+                    className="question-button"
                     key={index}
                     onClick={() => handleAnswerButtonClick(answerOption)}
                   >

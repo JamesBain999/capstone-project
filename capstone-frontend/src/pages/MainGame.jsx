@@ -1,28 +1,28 @@
-import React, { useState, useEffect } from "react";  // Importing necessary modules from React library
-import { useNavigate } from "react-router-dom";  // Importing useNavigate hook from react-router-dom
-import DiceComponent from "../GameComponents/DiceComponent";  // Importing custom DiceComponent
-import BoardComponent from "../GameComponents/BoardComponent";  // Importing custom BoardComponent
-import movePlayer from "../GameComponents/MovementLogic";  // Importing custom MovementLogic function
-import QuestionComponent from "../GameComponents/QuestionComponent";  // Importing custom QuestionComponent
-import { useGameState } from "../contexts/GameStateContext";  // Importing custom hook from GameStateContext
-import { useUserIdContext } from "../contexts/CurrentUserIdContext";  // Importing custom hook from CurrentUserIdContext
-import gameStateService from "../services/GameStateService";  // Importing game state service functions
-import getCategory from "../services/CategoryUtility";  // Importing utility function for determining category
+import React, { useState, useEffect } from "react"; // Importing necessary modules from React library
+import { useNavigate } from "react-router-dom"; // Importing useNavigate hook from react-router-dom
+import DiceComponent from "../GameComponents/DiceComponent"; // Importing custom DiceComponent
+import BoardComponent from "../GameComponents/BoardComponent"; // Importing custom BoardComponent
+import movePlayer from "../GameComponents/MovementLogic"; // Importing custom MovementLogic function
+import QuestionComponent from "../GameComponents/QuestionComponent"; // Importing custom QuestionComponent
+import { useGameState } from "../contexts/GameStateContext"; // Importing custom hook from GameStateContext
+import { useUserIdContext } from "../contexts/CurrentUserIdContext"; // Importing custom hook from CurrentUserIdContext
+import gameStateService from "../services/GameStateService"; // Importing game state service functions
+import getCategory from "../services/CategoryUtility"; // Importing utility function for determining category
 import "../css/MainGame.css";
 
-const rows = 6;  // Number of rows on the game board
-const columns = 10;  // Number of columns on the game board
-const tileSize = 100;  // Size of each tile on the game board
-const playerRadius = 15;  // Radius of the player avatar on the game board
+const rows = 6; // Number of rows on the game board
+const columns = 10; // Number of columns on the game board
+const tileSize = 100; // Size of each tile on the game board
+const playerRadius = 15; // Radius of the player avatar on the game board
 
 export default function MainGame() {
-  const navigate = useNavigate();  // Initializing useNavigate hook for navigation
-  const { currentUserId } = useUserIdContext();  // Using custom hook to get current user ID
-  const { currentGameState, setCurrentGameState } = useGameState();  // Using custom hook to get and set game state
-  const [diceNumber, setDiceNumber] = useState({ number: 0 });  // State to store the rolled dice number
-  const [gameStateId, setGameStateId] = useState(null);  // State to store the ID of the current game state
-  const [showQuestion, setShowQuestion] = useState(false);  // State to control whether to show the question component
-  const [currentCategory, setCurrentCategory] = useState("history");  // State to store the current category for questions
+  const navigate = useNavigate(); // Initializing useNavigate hook for navigation
+  const { currentUserId } = useUserIdContext(); // Using custom hook to get current user ID
+  const { currentGameState, setCurrentGameState } = useGameState(); // Using custom hook to get and set game state
+  const [diceNumber, setDiceNumber] = useState({ number: 0 }); // State to store the rolled dice number
+  const [gameStateId, setGameStateId] = useState(null); // State to store the ID of the current game state
+  const [showQuestion, setShowQuestion] = useState(false); // State to control whether to show the question component
+  const [currentCategory, setCurrentCategory] = useState("history"); // State to store the current category for questions
 
   // useEffect hook to update the current category based on the player's position on the game board
   useEffect(() => {
@@ -107,7 +107,6 @@ export default function MainGame() {
     }
   };
 
-
   // Function to handle rolling the dice
   const handleRollDice = (diceRoll) => {
     setDiceNumber({ number: diceRoll });
@@ -121,8 +120,13 @@ export default function MainGame() {
   // Rendering the main game component
   return (
     <div className="App">
-      <h1 className='correct-answers'>{currentGameState.score}/6 Answers correct</h1>
-      <DiceComponent onRollDice={handleRollDice} disabled={showQuestion} />
+      <div className="gameDetails">
+        <h1 className="correct-answers">
+          {currentGameState.score}/6 Answers correct
+        </h1>
+
+        <DiceComponent onRollDice={handleRollDice} disabled={showQuestion} />
+      </div>
       <div
         className="game-board"
         style={{

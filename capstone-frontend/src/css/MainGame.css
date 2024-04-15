@@ -48,15 +48,17 @@
     padding: 10px 20px;
     font-size: 16px;
     cursor: pointer;
-    margin-top: 20px;
+    margin-top: 15px;
     transition: background-color 0.3s, color 0.3s;
     width: 90%;
     height: 90%;
+    border: solid white 5px;
   }
   
   .question-button:hover {
     background-color: darkslategrey;
     color: white;
+    border: solid white 5px;
   }
 
   #answer-section {
@@ -69,6 +71,18 @@
 
  .correct-answers {
     color: white;
+    font-family: monospace;
     text-align: center;
     font-size: 50px;
+    text-transform: uppercase;
+ }
+
+ .gameDetails{
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 30px;
+ }
+
+ .gameDetails button:hover{
+    cursor: pointer;
  }
